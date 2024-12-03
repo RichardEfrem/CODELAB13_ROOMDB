@@ -13,6 +13,9 @@
         android:theme="@style/Theme.CODELAB13PABA_ROOMDB"
         tools:targetApi="31">
         <activity
+            android:name=".TambahNote"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

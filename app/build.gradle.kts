@@ -1,11 +1,12 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.devtools.ksp")
 }
 
 android {
     namespace = "c14220270.paba.codelab13paba_roomdb"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "c14220270.paba.codelab13paba_roomdb"
@@ -45,4 +46,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.runtime)
 }
