@@ -1,6 +1,7 @@
 package c14220270.paba.codelab13paba_roomdb
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
@@ -20,6 +21,12 @@ class TambahNote : AppCompatActivity() {
 
         var DB = daftarBelanjaDB.getDatabase(this)
         var tanggal = getCurrentDate()
+
+        var iID : Int = 0
+        var iAddEdit : Int = 0
+
+        iID = intent.getIntExtra("id", 0)
+        iAddEdit = intent.getIntExtra("addEdit", 0)
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -45,6 +52,35 @@ class TambahNote : AppCompatActivity() {
                 )
             }
             finish()
+        }
+
+        var _btnUpdate = findViewById<Button>(R.id.btnUpdate)
+        _btnUpdate.setOnClickListener{
+            CoroutineScope(Dispatchers.IO).async {
+                DB.funDaftarBelanjaDAO().update(
+                    isi_tanggal = tanggal,
+                    isi_item = _etItem.text.toString(),
+                    isi_jumlah = _etJumlah.text.toString(),
+                    pilihId = iID
+                )
+            }
+            finish()
+        }
+
+        if (iAddEdit == 0) {
+            _btnTambah.visibility = View.VISIBLE
+            _btnUpdate.visibility = View.GONE
+            _etItem.isEnabled = true
+        }else {
+            _btnTambah.visibility = View.GONE
+            _btnUpdate.visibility = View.VISIBLE
+            _etItem.isEnabled = false
+
+            CoroutineScope(Dispatchers.IO).async {
+                val item = DB.funDaftarBelanjaDAO().getItem(iID)
+                _etItem.setText(item.item)
+                _etJumlah.setText(item.jumlah)
+            }
         }
     }
 }
