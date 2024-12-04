@@ -17,6 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -48,6 +49,20 @@ class MainActivity : AppCompatActivity() {
         _fabAdd.setOnClickListener{
             startActivity(Intent(this, TambahNote::class.java))
         }
+
+        adapterDaftar.setOnItemClickCallback(
+            object : adapterDaftar.OnItemClickCallback {
+                override fun delData(dtBelanja: daftarBelanja) {
+                    CoroutineScope(Dispatchers.IO).async {
+                        DB.funDaftarBelanjaDAO().delete(dtBelanja)
+                        val daftar = DB.funDaftarBelanjaDAO().selectAll()
+                        withContext(Dispatchers.Main) {
+                            adapterDaftar.isiData(daftar)
+                        }
+                    }
+                }
+            }
+        )
     }
 
     override fun onStart() {
